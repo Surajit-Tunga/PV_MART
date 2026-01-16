@@ -1,24 +1,64 @@
 const mongoose = require("mongoose")
-const bcrypt = require("bcryptjs")
 
-const userSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  role: { type: String, enum: ["buyer","seller","admin"], default: "buyer" }
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      trim: true
+    },
+
+    email: {
+      type: String,
+      unique: true,
+      sparse: true,
+      lowercase: true
+    },
+
+    phone: {
+      type: String,
+      unique: true,
+      sparse: true
+    },
+
+    // Auth provider
+    authProvider: {
+      type: String,
+      enum: ["email", "google"],
+      required: true
+    },
+
+    isVerified: {
+      type: Boolean,
+      default: false
+    },
+
+    // Role is SYSTEM controlled, not user input
+    role: {
+      type: String,
+      enum: ["buyer", "seller", "admin"],
+      default: "seller"
+    },
+
+    // OTP login
+    otp: String,
+    otpExpiry: Date,
+
+    // Seller onboarding flag
+    shopProfileCompleted: {
+      type: Boolean,
+      default: false
+    }
+  },
+  { timestamps: true }
+)
+
+// Validation: email OR phone must exist
+userSchema.pre("validate", function (next) {
+  if (!this.email && !this.phone) {
+    next(new Error("Email or phone is required"))
+  } else {
+    next()
+  }
 })
-
-// Password hashing
-userSchema.pre("save", async function(next) {
-  if(!this.isModified("password")) return next()
-  const salt = await bcrypt.genSalt(10)
-  this.password = await bcrypt.hash(this.password, salt)
-  next()
-})
-
-// Compare password
-userSchema.methods.matchPassword = async function(enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password)
-}
 
 module.exports = mongoose.model("User", userSchema)

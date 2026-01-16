@@ -1,3 +1,5 @@
+import React from "react"
+
 export default function SellerLanding() {
   return (
     <div>
@@ -8,3 +10,6 @@ export default function SellerLanding() {
     </div>
   )
 }
+
+// This is the starting point for sellers to either log in or set up their shop. Having some platform related information and simple "Want to sell " button
+

@@ -7,45 +7,55 @@ const generateToken = (id) =>
 
 // Request OTP
 exports.requestOtp = async (req, res) => {
-  const { email } = req.body
+  try {
+    const { email } = req.body
 
-  let user = await User.findOne({ email })
+    let user = await User.findOne({ email })
 
-  if (!user) {
-    user = await User.create({
-      email,
-      authProvider: "email",
-      role: "seller"
-    })
+    if (!user) {
+      user = await User.create({
+        email,
+        authProvider: "email",
+        role: "seller"
+      })
+    }
+
+    const otp = generateOTP()
+    user.otp = otp
+    user.otpExpiry = Date.now() + 5 * 60 * 1000
+    await user.save()
+
+    console.log("OTP:", otp) // MVP only
+
+    res.json({ message: "OTP sent" })
+  } catch (error) {
+    console.error("requestOtp error:", error)
+    res.status(500).json({ message: error.message })
   }
-
-  const otp = generateOTP()
-  user.otp = otp
-  user.otpExpiry = Date.now() + 5 * 60 * 1000
-  await user.save()
-
-  console.log("OTP:", otp) // MVP only
-
-  res.json({ message: "OTP sent" })
 }
 
 // Verify OTP
 exports.verifyOtp = async (req, res) => {
-  const { email, otp } = req.body
+  try {
+    const { email, otp } = req.body
 
-  const user = await User.findOne({ email })
+    const user = await User.findOne({ email })
 
-  if (!user || user.otp !== otp || user.otpExpiry < Date.now()) {
-    return res.status(400).json({ message: "Invalid OTP" })
+    if (!user || user.otp !== otp || user.otpExpiry < Date.now()) {
+      return res.status(400).json({ message: "Invalid OTP" })
+    }
+
+    user.isVerified = true
+    user.otp = null
+    user.otpExpiry = null
+    await user.save()
+
+    res.json({
+      token: generateToken(user._id),
+      shopProfileCompleted: user.shopProfileCompleted
+    })
+  } catch (error) {
+    console.error("verifyOtp error:", error)
+    res.status(500).json({ message: error.message })
   }
-
-  user.isVerified = true
-  user.otp = null
-  user.otpExpiry = null
-  await user.save()
-
-  res.json({
-    token: generateToken(user._id),
-    shopProfileCompleted: user.shopProfileCompleted
-  })
 }

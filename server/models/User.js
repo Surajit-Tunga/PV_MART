@@ -11,7 +11,8 @@ const userSchema = new mongoose.Schema(
       type: String,
       unique: true,
       sparse: true,
-      lowercase: true
+      lowercase: true,
+      trim: true
     },
 
     phone: {
@@ -51,14 +52,5 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true }
 )
-
-// Validation: email OR phone must exist
-userSchema.pre("validate", function (next) {
-  if (!this.email && !this.phone) {
-    next(new Error("Email or phone is required"))
-  } else {
-    next()
-  }
-})
 
 module.exports = mongoose.model("User", userSchema)

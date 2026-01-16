@@ -1,3 +1,4 @@
+import React from "react"
 import { useState } from "react"
 import { API } from "../services/api"
 
@@ -28,3 +29,5 @@ export default function SellerLogin() {
     </>
   )
 }
+
+// This component allows sellers to log in using OTP sent to their email. Please improve the UI.

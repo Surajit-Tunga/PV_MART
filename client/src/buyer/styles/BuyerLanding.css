@@ -1,0 +1,602 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: #333;
+}
+
+.buyer-app {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* Header */
+.header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.logo-icon {
+  font-size: 2rem;
+}
+
+.logo h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  transition: opacity 0.3s;
+}
+
+.nav-links a:hover {
+  opacity: 0.8;
+}
+
+/* Hero Section */
+.hero {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 6rem 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hero-content h2 {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.hero-content > p:nth-of-type(1) {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 300;
+}
+
+.hero-subtitle {
+  font-size: 1rem;
+  opacity: 0.9;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.cta-button {
+  background-color: #ffc107;
+  color: #333;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.cta-button:hover {
+  background-color: #ffb300;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.hero-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.solar-panels-illustration {
+  display: flex;
+  gap: 1rem;
+  transform: rotate(-5deg);
+}
+
+.panel {
+  width: 80px;
+  height: 120px;
+  background: linear-gradient(45deg, #00d4ff, #0099ff);
+  border-radius: 5px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  animation: float 3s ease-in-out infinite;
+}
+
+.panel:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.panel:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+/* About Section */
+.about {
+  padding: 5rem 2rem;
+  background-color: #f8f9fa;
+  text-align: center;
+}
+
+.about h2 {
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+  color: #333;
+}
+
+.about-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.about-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.about-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.about-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.about-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #667eea;
+}
+
+.about-card p {
+  color: #666;
+  line-height: 1.8;
+}
+
+/* Calculator Section */
+.calculator {
+  padding: 5rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.calculator h2 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.calculator-subtitle {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 3rem;
+}
+
+.calculator-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+.calculator-input {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 2.5rem;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+}
+
+.calculator-input label {
+  display: block;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.calculator-input input {
+  width: 100%;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.calculate-btn {
+  width: 100%;
+  background-color: #ffc107;
+  color: #333;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.calculate-btn:hover {
+  background-color: #ffb300;
+  transform: scale(1.02);
+}
+
+.calculator-results {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1.5rem;
+}
+
+.result-card {
+  background: white;
+  border: 2px solid #667eea;
+  border-radius: 10px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.3s;
+}
+
+.result-card:hover {
+  background-color: #f8f9fa;
+  border-color: #764ba2;
+}
+
+.result-label {
+  display: block;
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.result-value {
+  display: block;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #667eea;
+}
+
+.connect-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  align-self: center;
+}
+
+.connect-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(102, 126, 234, 0.5);
+}
+
+/* Features Section */
+.features {
+  padding: 5rem 2rem;
+  background-color: #f8f9fa;
+}
+
+.features h2 {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 3rem;
+  color: #333;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  transition: all 0.3s;
+  border-top: 4px solid #667eea;
+}
+
+.feature-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+}
+
+.feature-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #667eea;
+  margin-bottom: 1rem;
+}
+
+.feature-card h3 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.feature-card p {
+  color: #666;
+  line-height: 1.8;
+}
+
+/* Benefits Section */
+.benefits {
+  padding: 5rem 2rem;
+  text-align: center;
+}
+
+.benefits h2 {
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+  color: #333;
+}
+
+.benefits-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.benefit-item {
+  padding: 2rem;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  border-radius: 10px;
+  transition: all 0.3s;
+}
+
+.benefit-item:hover {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+  transform: scale(1.05);
+}
+
+.benefit-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.benefit-item h3 {
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.benefit-item p {
+  color: #666;
+  line-height: 1.6;
+}
+
+/* CTA Section */
+.cta-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.cta-section h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.cta-section p {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
+.cta-button-large {
+  background-color: #ffc107;
+  color: #333;
+  border: none;
+  padding: 1.2rem 3rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.cta-button-large:hover {
+  background-color: #ffb300;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Footer */
+.footer {
+  background-color: #222;
+  color: #ddd;
+  padding: 3rem 2rem 1rem;
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto 2rem;
+}
+
+.footer-section h4 {
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.footer-section p {
+  line-height: 1.8;
+  font-size: 0.9rem;
+}
+
+.footer-section ul {
+  list-style: none;
+}
+
+.footer-section ul li {
+  margin-bottom: 0.5rem;
+}
+
+.footer-section a {
+  color: #ddd;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-section a:hover {
+  color: white;
+}
+
+.social-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 1.5rem;
+  border-top: 1px solid #444;
+  font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero {
+    grid-template-columns: 1fr;
+    padding: 3rem 2rem;
+  }
+
+  .hero-content h2 {
+    font-size: 2rem;
+  }
+
+  .hero-content > p:nth-of-type(1) {
+    font-size: 1.2rem;
+  }
+
+  .header-content {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .calculator-container {
+    grid-template-columns: 1fr;
+  }
+
+  .about h2,
+  .calculator h2,
+  .features h2,
+  .benefits h2,
+  .cta-section h2 {
+    font-size: 2rem;
+  }
+
+  .features-grid,
+  .benefits-container {
+    grid-template-columns: 1fr;
+  }
+
+  .result-card {
+    padding: 1rem;
+  }
+
+  .result-value {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-content h2 {
+    font-size: 1.5rem;
+  }
+
+  .cta-button,
+  .cta-button-large {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .about-card,
+  .feature-card {
+    padding: 1.5rem;
+  }
+}

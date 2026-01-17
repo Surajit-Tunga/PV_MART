@@ -1,21 +1,24 @@
-import React, { useEffect } from "react"
-import { API } from "../services/api"
+import React from "react"
+import { Routes, Route, Navigate } from "react-router-dom"
+import BuyerLanding from "./BuyerLanding"
+import BuyerLogin from "./BuyerLogin"
+import BuyerProducts from "./BuyerProducts"
+import BuyerCart from "./BuyerCart"
+import BuyerCheckout from "./BuyerCheckout"
+import BuyerPayment from "./BuyerPayment"
+import BuyerOrders from "./BuyerOrders"
 
 export default function BuyerApp() {
-
-  const testLogin = async () => {
-    const res = await API.post("/api/auth/register", {
-      name: "Test Buyer",
-      email: "buyer@test.com",
-      password: "123456",
-      role: "buyer"
-    })
-    console.log(res.data)
-  }
-
-  useEffect(() => {
-    testLogin()
-  }, [])
-
-  return <h1>Buyer Portal</h1>
+  return (
+    <Routes>
+      <Route path="/" element={<BuyerLanding />} />
+      <Route path="/login" element={<BuyerLogin />} />
+      <Route path="/products" element={<BuyerProducts />} />
+      <Route path="/cart" element={<BuyerCart />} />
+      <Route path="/checkout" element={<BuyerCheckout />} />
+      <Route path="/payment" element={<BuyerPayment />} />
+      <Route path="/orders" element={<BuyerOrders />} />
+      <Route path="*" element={<Navigate to="/" />} />
+    </Routes>
+  )
 }

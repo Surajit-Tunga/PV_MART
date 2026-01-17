@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const bcrypt = require("bcryptjs")
 
 const userSchema = new mongoose.Schema(
   {
@@ -15,6 +16,11 @@ const userSchema = new mongoose.Schema(
       trim: true
     },
 
+    password: {
+      type: String,
+      select: false // Don't include password in queries by default
+    },
+
     phone: {
       type: String,
       unique: true,
@@ -25,7 +31,7 @@ const userSchema = new mongoose.Schema(
     authProvider: {
       type: String,
       enum: ["email", "google"],
-      required: true
+      default: "email"
     },
 
     isVerified: {
@@ -52,5 +58,26 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true }
 )
+
+// Hash password before saving
+userSchema.pre("save", async function () {
+  // Only hash password if it was modified and exists
+  if (!this.isModified("password") || !this.password) {
+    return
+  }
+  
+  try {
+    const salt = await bcrypt.genSalt(10)
+    this.password = await bcrypt.hash(this.password, salt)
+  } catch (error) {
+    throw error
+  }
+})
+
+// Method to compare password
+userSchema.methods.matchPassword = async function (enteredPassword) {
+  if (!this.password) return false
+  return await bcrypt.compare(enteredPassword, this.password)
+}
 
 module.exports = mongoose.model("User", userSchema)

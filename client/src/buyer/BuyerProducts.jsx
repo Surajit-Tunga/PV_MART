@@ -279,6 +279,22 @@ export default function BuyerProducts() {
           >
             🛒 Cart {cartCount > 0 && `(${cartCount})`}
           </button>
+          <button
+            onClick={() => navigate("/buyer/orders")}
+            style={{
+              padding: "0.5rem 1rem",
+              background: "#fff",
+              color: "#667eea",
+              border: "1px solid #667eea",
+              borderRadius: "5px",
+              cursor: "pointer",
+              fontSize: "0.9rem",
+              fontWeight: "600",
+              marginRight: "1rem"
+            }}
+          >
+            📦 My Orders
+          </button>
           <div className="user-info">
             <span>👤 {user?.name}</span>
           </div>

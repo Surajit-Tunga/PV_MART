@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import API from "../services/api";
 
 export default function BuyerPayment() {
-  const navigate = useNavigate()
-  const [paymentMethod, setPaymentMethod] = useState("upi")
-  const [cartItems, setCartItems] = useState([])
+  const navigate = useNavigate();
+  const [paymentMethod, setPaymentMethod] = useState("upi");
+  const [cartItems, setCartItems] = useState([]);
   const [cardInfo, setCardInfo] = useState({
     cardNumber: "",
     cardholderName: "",
     expiryDate: "",
     cvv: ""
-  })
-  const [paymentProcessing, setPaymentProcessing] = useState(false)
+  });
+  const [paymentProcessing, setPaymentProcessing] = useState(false);
 
   useEffect(() => {
     const fetchCart = async () => {
@@ -62,36 +63,44 @@ export default function BuyerPayment() {
   }
 
   const handlePayment = async (e) => {
-    if (e) e.preventDefault()
+    if (e) e.preventDefault();
 
     if (paymentMethod === "card" && !cardInfo.cardNumber) {
-      alert("Please enter card details")
-      return
+      alert("Please enter card details");
+      return;
     }
 
-    setPaymentProcessing(true)
-    
+    setPaymentProcessing(true);
     try {
       // Simulate payment processing
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      
-      // Clear cart after successful payment
-      try {
-        await API.delete("/api/buyer/cart")
-      } catch (error) {
-        console.error("Error clearing cart:", error)
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      // Get shipping info from localStorage
+      const shippingInfo = JSON.parse(localStorage.getItem("shippingInfo") || "{}");
+
+      // Place order via backend
+      const orderRes = await API.post("/api/buyer/place-order", {
+        shippingAddress: shippingInfo.address,
+        customerName: shippingInfo.fullName,
+        customerPhone: shippingInfo.phone,
+        customerEmail: shippingInfo.email,
+        paymentMethod,
+      });
+
+      if (orderRes.data.success) {
+        localStorage.removeItem("shippingInfo");
+        alert("Payment successful! Order confirmed.");
+        navigate("/buyer/products");
+      } else {
+        alert(orderRes.data.message || "Order failed. Please try again.");
       }
-      
-      localStorage.removeItem("shippingInfo")
-      alert("Payment successful! Order confirmed.")
-      navigate("/orders")
     } catch (error) {
-      console.error("Payment error:", error)
-      alert("Payment failed. Please try again.")
+      console.error("Payment error:", error);
+      alert(error.response?.data?.message || "Payment failed. Please try again.");
     } finally {
-      setPaymentProcessing(false)
+      setPaymentProcessing(false);
     }
-  }
+  };
 
   return (
     <div style={{ padding: "2rem", maxWidth: "600px", margin: "0 auto" }}>

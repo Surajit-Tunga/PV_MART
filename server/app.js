@@ -22,5 +22,8 @@ app.use("/api/seller/orders", require("./routes/orderRoutes"))
 // Buyer routes
 app.use("/api/buyer/products", require("./routes/buyerProductRoutes"))
 app.use("/api/buyer/cart", require("./routes/cartRoutes"))
+app.use("/api/buyer/orders", require("./routes/buyerOrderRoutes"))
+app.use("/api/buyer/place-order", require("./routes/placeOrderRoutes"))
+app.use("/api/buyer/place-order", require("./routes/placeOrderRoutes"))
 
 module.exports = app

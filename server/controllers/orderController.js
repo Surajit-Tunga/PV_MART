@@ -1,3 +1,82 @@
+const Cart = require("../models/Cart");
+
+// Place a new order for the buyer
+const placeOrder = async (req, res) => {
+  try {
+    // Get buyer's cart
+    const cart = await Cart.findOne({ buyer: req.user._id }).populate("items.product");
+    if (!cart || cart.items.length === 0) {
+      return res.status(400).json({ success: false, message: "Cart is empty" });
+    }
+
+    // Prepare order data
+    const orderProducts = cart.items.map((item) => ({
+      product: item.product._id || item.product,
+      quantity: item.quantity,
+      price: item.price,
+      subtotal: item.price * item.quantity
+    }));
+    const totalAmount = orderProducts.reduce((sum, item) => sum + item.subtotal, 0);
+
+    // Shipping info from request (optional)
+    const { shippingAddress, customerName, customerPhone, customerEmail, paymentMethod } = req.body;
+
+    // Create order for each seller in the cart (if multi-seller)
+    // For now, assume all items are from one seller (first item's seller)
+    const seller = cart.items[0].product.seller || cart.items[0].seller;
+
+    const order = await Order.create({
+      seller,
+      buyer: req.user._id,
+      products: orderProducts,
+      totalAmount,
+      paymentStatus: "completed",
+      paymentMethod: paymentMethod || "upi",
+      shippingAddress,
+      customerName,
+      customerPhone,
+      customerEmail
+    });
+
+    // Clear the cart
+    cart.items = [];
+    await cart.save();
+
+    res.status(201).json({
+      success: true,
+      message: "Order placed successfully",
+      order
+    });
+  } catch (error) {
+    console.error("Error placing order:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error placing order",
+      error: error.message
+    });
+  }
+};
+// Get all orders for a buyer
+const getBuyerOrders = async (req, res) => {
+  try {
+    const orders = await Order.find({ buyer: req.user._id })
+      .populate("seller", "name email phone")
+      .populate("products.product", "productName price")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      orders
+    });
+  } catch (error) {
+    console.error("Error fetching buyer orders:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error fetching buyer orders",
+      error: error.message
+    });
+  }
+};
 const Order = require("../models/Order")
 
 // Get all orders for a seller
@@ -130,5 +209,7 @@ module.exports = {
   getSellerOrders,
   getOrder,
   updateOrderStatus,
-  getOrderStats
+  getOrderStats,
+  getBuyerOrders,
+  placeOrder
 }

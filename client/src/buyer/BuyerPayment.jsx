@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../services/api";
+import { Link } from "react-router-dom";
 
 export default function BuyerPayment() {
   const navigate = useNavigate();
@@ -13,6 +14,8 @@ export default function BuyerPayment() {
     cvv: ""
   });
   const [paymentProcessing, setPaymentProcessing] = useState(false);
+  const [qrData, setQrData] = useState({ qr: "", upiUrl: "" });
+  const [orderPlaced, setOrderPlaced] = useState(null);
 
   useEffect(() => {
     const fetchCart = async () => {
@@ -50,12 +53,15 @@ export default function BuyerPayment() {
   const tax = Math.round(subtotal * 0.18)
   const totalAmount = subtotal + shipping + tax
 
-  // Generate UPI payment link
-  const upiId = "pvmart@upi" // Replace with your actual UPI ID
-  const upiLink = `upi://pay?pa=${upiId}&am=${totalAmount}&cu=INR&tn=PV Mart Order`
-  
-  // QR Code URL using a free QR code generator API
-  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(upiLink)}`
+
+  // Fetch QR code from backend for UPI payment
+  useEffect(() => {
+    if (paymentMethod === "upi") {
+      API.get(`/api/payment/upi-qr?amount=${totalAmount}&note=PV Mart Order`).then(res => {
+        if (res.data.success) setQrData(res.data);
+      });
+    }
+  }, [paymentMethod, totalAmount]);
 
   const handleCardChange = (e) => {
     const { name, value } = e.target
@@ -78,7 +84,7 @@ export default function BuyerPayment() {
       // Get shipping info from localStorage
       const shippingInfo = JSON.parse(localStorage.getItem("shippingInfo") || "{}");
 
-      // Place order via backend
+      // Place order via backend (status: pending, paymentStatus: pending)
       const orderRes = await API.post("/api/buyer/place-order", {
         shippingAddress: shippingInfo.address,
         customerName: shippingInfo.fullName,
@@ -89,8 +95,7 @@ export default function BuyerPayment() {
 
       if (orderRes.data.success) {
         localStorage.removeItem("shippingInfo");
-        alert("Payment successful! Order confirmed.");
-        navigate("/buyer/products");
+        setOrderPlaced(orderRes.data.order);
       } else {
         alert(orderRes.data.message || "Order failed. Please try again.");
       }
@@ -101,6 +106,19 @@ export default function BuyerPayment() {
       setPaymentProcessing(false);
     }
   };
+
+
+  if (orderPlaced) {
+    return (
+      <div style={{ padding: "2rem", maxWidth: "600px", margin: "0 auto", textAlign: "center" }}>
+        <h2 style={{ color: "#1976d2" }}>Order Placed!</h2>
+        <p>Your order has been placed and is pending admin approval.</p>
+        <p>Order ID: <b>{orderPlaced._id.slice(-6)}</b></p>
+        <p>You will receive confirmation once payment is approved by admin.</p>
+        <Link to={`/buyer/orders`}>Track your orders</Link>
+      </div>
+    );
+  }
 
   return (
     <div style={{ padding: "2rem", maxWidth: "600px", margin: "0 auto" }}>
@@ -325,21 +343,25 @@ export default function BuyerPayment() {
             marginBottom: "1rem",
             border: "2px solid #667eea"
           }}>
-            <img
-              src={qrCodeUrl}
-              alt="UPI QR Code"
-              style={{
-                width: "300px",
-                height: "300px",
-                display: "block"
-              }}
-            />
+            {qrData.qr ? (
+              <img
+                src={qrData.qr}
+                alt="UPI QR Code"
+                style={{
+                  width: "300px",
+                  height: "300px",
+                  display: "block"
+                }}
+              />
+            ) : (
+              <div>Loading QR...</div>
+            )}
           </div>
           <p style={{ color: "#666", marginBottom: "0.5rem" }}>
             Amount: <strong style={{ color: "#667eea", fontSize: "1.2rem" }}>₹{totalAmount.toLocaleString()}</strong>
           </p>
           <p style={{ color: "#666", marginBottom: "1rem", fontSize: "0.9rem" }}>
-            UPI ID: <strong>{upiId}</strong>
+            UPI ID: <strong>{qrData.upiUrl?.split("pa=")[1]?.split("&")[0] || "demo@upi"}</strong>
           </p>
           <p style={{ color: "#666", fontSize: "0.85rem", marginBottom: "1.5rem" }}>
             Scan this QR code with any UPI app (Google Pay, PhonePe, Paytm, etc.)

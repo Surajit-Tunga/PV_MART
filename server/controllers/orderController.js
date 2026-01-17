@@ -25,12 +25,15 @@ const placeOrder = async (req, res) => {
     // For now, assume all items are from one seller (first item's seller)
     const seller = cart.items[0].product.seller || cart.items[0].seller;
 
+
     const order = await Order.create({
       seller,
       buyer: req.user._id,
       products: orderProducts,
       totalAmount,
-      paymentStatus: "completed",
+      paymentStatus: "pending", // Wait for admin approval
+      adminApproval: "pending",
+      status: "pending",
       paymentMethod: paymentMethod || "upi",
       shippingAddress,
       customerName,

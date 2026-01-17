@@ -26,4 +26,10 @@ app.use("/api/buyer/orders", require("./routes/buyerOrderRoutes"))
 app.use("/api/buyer/place-order", require("./routes/placeOrderRoutes"))
 app.use("/api/buyer/place-order", require("./routes/placeOrderRoutes"))
 
+// Admin routes
+app.use("/api/admin", require("./routes/adminRoutes"));
+
+// Payment routes
+app.use("/api/payment", require("./routes/paymentRoutes"));
+
 module.exports = app

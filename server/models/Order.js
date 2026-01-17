@@ -23,6 +23,14 @@ const orderSchema = new mongoose.Schema(
       enum: ["pending", "completed", "failed"],
       default: "pending"
     },
+    adminApproval: {
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: "pending"
+    },
+    paymentProof: {
+      type: String // URL or reference to uploaded payment proof (if needed)
+    },
     paymentMethod: String,
     shippingAddress: String,
     customerName: String,
